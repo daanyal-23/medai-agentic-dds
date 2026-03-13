@@ -4,6 +4,7 @@
 
 A multi-agent web portal that analyzes chest X-rays + clinical vignettes to produce evidence-grounded diagnostic decision support reports. Built with **CrewAI** orchestration, **GPT-4o Vision**, and **PubMed RAG**.
 
+### 🚀 Live demo: [medai-agentic-dds.streamlit.app](https://medai-agentic-dds-wrc4wesf7o9kwwgchssbapp.streamlit.app/) (enter your OpenAI API key in the sidebar to run)
 ---
 
 ## Architecture
