@@ -1,0 +1,162 @@
+[
+  {
+    "vignette_id": "v001",
+    "title": "Acute Dyspnea with Hypoxemia",
+    "patient_context": {
+      "age": 64, "sex": "Male",
+      "chief_complaint": "Acute dyspnea, onset 2 hours ago",
+      "hpi": "64-year-old male with sudden onset shortness of breath. No fever. Mild pleuritic chest pain on right side.",
+      "vitals": {"BP": "98/60", "HR": 120, "RR": 28, "SpO2": 88, "Temp": 37.1},
+      "labs": {"D_dimer": 1200, "troponin": 0.03, "WBC": 9.2, "CRP": 12.0},
+      "meds": ["metformin 500mg BD"],
+      "allergies": "NKDA",
+      "pmh": "T2DM, ex-smoker (20 pack-years)"
+    },
+    "expected_differentials": ["Pulmonary Embolism", "Pneumothorax", "Acute Heart Failure"],
+    "notes": "Classic PE presentation — elevated D-dimer, hypoxemia, tachycardia"
+  },
+  {
+    "vignette_id": "v002",
+    "title": "Chest Tightness with Cardiac Risk Factors",
+    "patient_context": {
+      "age": 58, "sex": "Male",
+      "chief_complaint": "Chest tightness and shortness of breath for 3 hours",
+      "hpi": "58-year-old male with crushing chest pain radiating to left arm and jaw. Diaphoresis and nausea present.",
+      "vitals": {"BP": "145/90", "HR": 110, "RR": 22, "SpO2": 92, "Temp": 37.0},
+      "labs": {"D_dimer": 400, "troponin": 0.8, "WBC": 11.2, "CRP": 18.0},
+      "meds": ["aspirin 81mg OD", "atorvastatin 20mg OD"],
+      "allergies": "NKDA",
+      "pmh": "Hypertension, hyperlipidemia, smoker (25 pack-years)"
+    },
+    "expected_differentials": ["Acute Coronary Syndrome", "Aortic Dissection", "Pulmonary Embolism"],
+    "notes": "Elevated troponin + risk factors strongly suggest ACS/NSTEMI"
+  },
+  {
+    "vignette_id": "v003",
+    "title": "Fever with Productive Cough",
+    "patient_context": {
+      "age": 45, "sex": "Female",
+      "chief_complaint": "Fever, productive cough, and dyspnea for 4 days",
+      "hpi": "45-year-old female presenting with worsening cough productive of green sputum, fever, and pleuritic chest pain.",
+      "vitals": {"BP": "118/76", "HR": 98, "RR": 24, "SpO2": 94, "Temp": 38.9},
+      "labs": {"D_dimer": 300, "troponin": 0.01, "WBC": 16.4, "CRP": 87.0},
+      "meds": ["salbutamol inhaler PRN"],
+      "allergies": "Penicillin",
+      "pmh": "Mild asthma"
+    },
+    "expected_differentials": ["Community-Acquired Pneumonia", "Pulmonary Abscess", "Pleural Effusion"],
+    "notes": "High WBC + fever + productive cough — classic CAP presentation"
+  },
+  {
+    "vignette_id": "v004",
+    "title": "Progressive Breathlessness in Elderly",
+    "patient_context": {
+      "age": 72, "sex": "Female",
+      "chief_complaint": "Progressive breathlessness over 2 weeks, orthopnea",
+      "hpi": "72-year-old female with worsening dyspnea on exertion, orthopnea, and bilateral ankle swelling.",
+      "vitals": {"BP": "158/95", "HR": 88, "RR": 20, "SpO2": 91, "Temp": 36.8},
+      "labs": {"D_dimer": 600, "troponin": 0.05, "WBC": 8.1, "CRP": 14.0},
+      "meds": ["ramipril 5mg OD", "furosemide 40mg OD", "bisoprolol 2.5mg OD"],
+      "allergies": "NKDA",
+      "pmh": "Hypertension, ischaemic heart disease, previous MI (2019)"
+    },
+    "expected_differentials": ["Acute Decompensated Heart Failure", "Pleural Effusion", "COPD Exacerbation"],
+    "notes": "Orthopnea + ankle oedema + cardiac history — heart failure exacerbation"
+  },
+  {
+    "vignette_id": "v005",
+    "title": "Young Male with Sudden Chest Pain",
+    "patient_context": {
+      "age": 22, "sex": "Male",
+      "chief_complaint": "Sudden right-sided chest pain and breathlessness",
+      "hpi": "22-year-old tall, slim male with sudden onset right-sided pleuritic chest pain and dyspnea at rest. No trauma.",
+      "vitals": {"BP": "122/78", "HR": 105, "RR": 26, "SpO2": 93, "Temp": 36.9},
+      "labs": {"D_dimer": 180, "troponin": 0.01, "WBC": 7.8, "CRP": 5.0},
+      "meds": [],
+      "allergies": "NKDA",
+      "pmh": "None"
+    },
+    "expected_differentials": ["Spontaneous Pneumothorax", "Pulmonary Embolism", "Pleuritis"],
+    "notes": "Classic spontaneous pneumothorax — tall slim young male, sudden onset"
+  },
+  {
+    "vignette_id": "v006",
+    "title": "Post-operative Hypoxemia",
+    "patient_context": {
+      "age": 55, "sex": "Female",
+      "chief_complaint": "Hypoxemia and dyspnea on post-op day 2",
+      "hpi": "55-year-old female, day 2 post right hemicolectomy. New onset dyspnea and desaturation. Calf tenderness noted.",
+      "vitals": {"BP": "110/70", "HR": 118, "RR": 26, "SpO2": 89, "Temp": 37.6},
+      "labs": {"D_dimer": 3200, "troponin": 0.04, "WBC": 13.5, "CRP": 45.0},
+      "meds": ["enoxaparin 40mg OD", "morphine PCA", "ondansetron 4mg PRN"],
+      "allergies": "NKDA",
+      "pmh": "Colorectal cancer, hypertension"
+    },
+    "expected_differentials": ["Pulmonary Embolism", "Hospital-Acquired Pneumonia", "Atelectasis"],
+    "notes": "Post-op + immobility + high D-dimer — high VTE risk"
+  },
+  {
+    "vignette_id": "v007",
+    "title": "Chronic Smoker with Acute Deterioration",
+    "patient_context": {
+      "age": 68, "sex": "Male",
+      "chief_complaint": "Worsening breathlessness and increased sputum for 3 days",
+      "hpi": "68-year-old heavy smoker with known COPD presenting with increased dyspnea, purulent sputum, and reduced exercise tolerance.",
+      "vitals": {"BP": "135/82", "HR": 96, "RR": 28, "SpO2": 85, "Temp": 37.8},
+      "labs": {"D_dimer": 520, "troponin": 0.02, "WBC": 14.2, "CRP": 62.0},
+      "meds": ["tiotropium inhaler OD", "salmeterol/fluticasone BD", "salbutamol PRN"],
+      "allergies": "NKDA",
+      "pmh": "COPD (FEV1 45%), hypertension, ex-smoker (40 pack-years)"
+    },
+    "expected_differentials": ["Acute Exacerbation of COPD", "Community-Acquired Pneumonia", "Pulmonary Embolism"],
+    "notes": "Known COPD + purulent sputum + raised WBC — infective exacerbation"
+  },
+  {
+    "vignette_id": "v008",
+    "title": "Tearing Chest Pain with Hypertension",
+    "patient_context": {
+      "age": 61, "sex": "Male",
+      "chief_complaint": "Sudden tearing chest pain radiating to the back",
+      "hpi": "61-year-old male with sudden onset severe tearing chest pain radiating to interscapular region. BP discrepancy between arms noted.",
+      "vitals": {"BP": "185/110", "HR": 102, "RR": 20, "SpO2": 96, "Temp": 36.9},
+      "labs": {"D_dimer": 2800, "troponin": 0.06, "WBC": 10.2, "CRP": 22.0},
+      "meds": ["amlodipine 10mg OD", "losartan 100mg OD"],
+      "allergies": "NKDA",
+      "pmh": "Hypertension, Marfan syndrome traits"
+    },
+    "expected_differentials": ["Aortic Dissection", "Acute Coronary Syndrome", "Pulmonary Embolism"],
+    "notes": "Tearing pain + BP asymmetry + Marfan traits — aortic dissection until proven otherwise"
+  },
+  {
+    "vignette_id": "v009",
+    "title": "Immunocompromised with Bilateral Infiltrates",
+    "patient_context": {
+      "age": 38, "sex": "Male",
+      "chief_complaint": "Progressive dyspnea and dry cough for 2 weeks",
+      "hpi": "38-year-old male with HIV (CD4 count 85) presenting with progressive dyspnea, non-productive cough, and low-grade fever.",
+      "vitals": {"BP": "124/80", "HR": 108, "RR": 30, "SpO2": 87, "Temp": 38.2},
+      "labs": {"D_dimer": 750, "troponin": 0.01, "WBC": 5.2, "CRP": 38.0},
+      "meds": ["tenofovir/emtricitabine OD", "dolutegravir OD"],
+      "allergies": "Sulfonamides",
+      "pmh": "HIV (poorly controlled), no prior OI"
+    },
+    "expected_differentials": ["Pneumocystis Pneumonia (PCP)", "Community-Acquired Pneumonia", "Pulmonary Tuberculosis"],
+    "notes": "Low CD4 + bilateral infiltrates + dry cough — PCP until proven otherwise"
+  },
+  {
+    "vignette_id": "v010",
+    "title": "Trauma with Chest Wall Injury",
+    "patient_context": {
+      "age": 34, "sex": "Female",
+      "chief_complaint": "Chest pain and dyspnea following RTA",
+      "hpi": "34-year-old female restrained driver involved in high-speed RTA. Chest wall tenderness, reduced air entry on left, haemoptysis.",
+      "vitals": {"BP": "102/65", "HR": 128, "RR": 32, "SpO2": 90, "Temp": 36.7},
+      "labs": {"D_dimer": 1800, "troponin": 0.12, "WBC": 12.4, "CRP": 28.0},
+      "meds": [],
+      "allergies": "NKDA",
+      "pmh": "None"
+    },
+    "expected_differentials": ["Traumatic Pneumothorax", "Haemothorax", "Pulmonary Contusion"],
+    "notes": "High-speed trauma + haemoptysis + hypotension — tension pneumothorax must be excluded"
+  }
+]
