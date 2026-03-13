@@ -14,9 +14,43 @@ st.set_page_config(
 )
 
 # ── Session state initialization (must be before any widget) ─────────────────
-for _key in ["image_pil", "result", "traces", "case_data"]:
+for _key in ["image_pil", "result", "traces", "case_data", "rag_seeded"]:
     if _key not in st.session_state:
         st.session_state[_key] = None
+
+# ── Auto-seed RAG index on first boot if ChromaDB is empty ───────────────────
+if not st.session_state.get("rag_seeded") and os.environ.get("OPENAI_API_KEY"):
+    try:
+        import chromadb
+        _chroma_path = os.path.join(os.path.dirname(__file__), "rag", "chroma_store")
+        _client = chromadb.PersistentClient(path=_chroma_path)
+        _col = _client.get_or_create_collection("medai_literature")
+        if _col.count() < 10:
+            with st.spinner("🔬 First-time setup: seeding RAG index from PubMed (~2 min)..."):
+                import sys
+                sys.path.insert(0, os.path.dirname(__file__))
+                from agents.retrieval_agent import RetrievalAgent
+                _ra = RetrievalAgent()
+                _seed_queries = [
+                    "pneumothorax diagnosis management chest X-ray",
+                    "pulmonary embolism diagnosis CTPA D-dimer",
+                    "community acquired pneumonia chest X-ray treatment guidelines",
+                    "pleural effusion causes diagnosis management",
+                    "cardiomegaly heart failure chest radiograph",
+                    "acute coronary syndrome NSTEMI diagnosis ECG troponin",
+                    "aortic dissection chest pain diagnosis CT",
+                    "congestive heart failure BNP echocardiogram management",
+                    "ARDS Berlin definition mechanical ventilation",
+                    "tension pneumothorax needle decompression emergency",
+                ]
+                for _q in _seed_queries:
+                    try:
+                        _ra.retrieve(query=_q, max_results=8, recency_years=10)
+                    except Exception:
+                        pass
+        st.session_state["rag_seeded"] = True
+    except Exception:
+        st.session_state["rag_seeded"] = True  # Don't block app on seed failure
 
 # ── Styles ──────────────────────────────────────────────────────────────────
 st.markdown("""
