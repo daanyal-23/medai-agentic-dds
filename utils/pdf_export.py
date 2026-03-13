@@ -21,7 +21,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
     styles = getSampleStyleSheet()
     elements = []
 
-    # ── Styles ────────────────────────────────────────────────────────────
+    # Styles 
     title_style = ParagraphStyle("Title2", parent=styles["Title"],
                                   fontSize=18, spaceAfter=6, textColor=colors.HexColor("#2c3e50"))
     h2_style    = ParagraphStyle("H2", parent=styles["Heading2"],
@@ -35,7 +35,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
                                   textColor=colors.HexColor("#2c3e50"),
                                   leftIndent=12, fontName="Helvetica-Oblique")
 
-    # ── Header ────────────────────────────────────────────────────────────
+    # Header 
     elements.append(Paragraph("🏥 MedAI — Diagnostic Decision Support Report", title_style))
     elements.append(Paragraph(
         f"Case ID: {result.get('case_id','')} | Generated: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}",
@@ -43,13 +43,13 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
     elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor("#3498db")))
     elements.append(Spacer(1, 0.3*cm))
 
-    # ── Disclaimer banner ──────────────────────────────────────────────────
+    # Disclaimer banner 
     elements.append(Paragraph(
         f"⚠️  {result.get('disclaimer','Research/education only. Not for clinical use.')}",
         warn_style))
     elements.append(Spacer(1, 0.4*cm))
 
-    # ── Patient context ───────────────────────────────────────────────────
+    # Patient context 
     ctx = case_data.get("patient_context", {})
     if ctx:
         elements.append(Paragraph("Patient Context", h2_style))
@@ -75,7 +75,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
         elements.append(t)
         elements.append(Spacer(1, 0.4*cm))
 
-    # ── Imaging findings ──────────────────────────────────────────────────
+    # Imaging findings 
     findings = result.get("imaging_findings", {})
     if findings:
         elements.append(Paragraph("Imaging Findings", h2_style))
@@ -102,7 +102,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
         elements.append(t)
         elements.append(Spacer(1, 0.4*cm))
 
-    # ── Differentials ─────────────────────────────────────────────────────
+    # Differentials 
     differentials = result.get("differentials", [])
     if differentials:
         elements.append(Paragraph("Differential Diagnoses", h2_style))
@@ -117,7 +117,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
             elements.append(Spacer(1, 0.2*cm))
         elements.append(Spacer(1, 0.2*cm))
 
-    # ── Red flags ─────────────────────────────────────────────────────────
+    # Red flags 
     red_flags = result.get("red_flags", [])
     if red_flags:
         elements.append(Paragraph("🚨 Red Flags", h2_style))
@@ -126,7 +126,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
             elements.append(Spacer(1, 0.1*cm))
         elements.append(Spacer(1, 0.2*cm))
 
-    # ── Next steps ────────────────────────────────────────────────────────
+    # Next steps 
     next_steps = result.get("next_steps", [])
     if next_steps:
         elements.append(Paragraph("Recommended Next Steps", h2_style))
@@ -134,7 +134,7 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
             elements.append(Paragraph(f"• {step}", body))
         elements.append(Spacer(1, 0.4*cm))
 
-    # ── Citations ─────────────────────────────────────────────────────────
+    # Citations 
     citations = result.get("citations", [])
     if citations:
         elements.append(Paragraph("Evidence Citations", h2_style))
@@ -147,13 +147,13 @@ def generate_pdf(result: dict, case_data: dict) -> bytes:
                 elements.append(Paragraph(f'"{c["quote"]}"', quote_style))
             elements.append(Spacer(1, 0.15*cm))
 
-    # ── Groundedness ──────────────────────────────────────────────────────
+    # Groundedness 
     note = result.get("groundedness_note","")
     if note:
         elements.append(Spacer(1, 0.2*cm))
         elements.append(Paragraph(f"Groundedness Note: {note}", small))
 
-    # ── Footer ────────────────────────────────────────────────────────────
+    # Footer 
     elements.append(Spacer(1, 0.5*cm))
     elements.append(HRFlowable(width="100%", thickness=0.5, color=colors.grey))
     elements.append(Paragraph(

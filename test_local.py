@@ -13,7 +13,7 @@ import time
 import argparse
 import importlib
 
-# ── Colour helpers ────────────────────────────────────────────────────────────
+# Colour helpers 
 GREEN  = "\033[92m"; RED  = "\033[91m"; YELLOW = "\033[93m"
 BOLD   = "\033[1m";  RESET = "\033[0m"
 ok  = lambda s: print(f"  {GREEN}✅ {s}{RESET}")
@@ -31,13 +31,13 @@ def check(condition, success_msg, fail_msg):
         err(fail_msg);   FAIL += 1
     return condition
 
-# ── 1. Python version ─────────────────────────────────────────────────────────
+# 1. Python version 
 hdr("1. Python version")
 import platform
 v = sys.version_info
 check(v >= (3, 10), f"Python {v.major}.{v.minor}.{v.micro}", f"Python 3.10+ required, got {v.major}.{v.minor}")
 
-# ── 2. Required packages ──────────────────────────────────────────────────────
+# 2. Required packages 
 hdr("2. Package imports")
 PACKAGES = [
     ("streamlit",   "streamlit"),
@@ -61,7 +61,7 @@ for mod, pkg in PACKAGES:
         err(f"{pkg} not installed  →  pip install {pkg}")
         FAIL += 1
 
-# ── 3. Project structure ──────────────────────────────────────────────────────
+# 3. Project structure 
 hdr("3. Project file structure")
 REQUIRED_FILES = [
     "app.py",
@@ -84,7 +84,7 @@ REQUIRED_FILES = [
 for f in REQUIRED_FILES:
     check(os.path.exists(f), f, f"MISSING: {f}")
 
-# ── 4. API key ────────────────────────────────────────────────────────────────
+# 4. API key 
 hdr("4. OpenAI API key")
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("--api-key", default=os.environ.get("OPENAI_API_KEY", ""))
@@ -102,7 +102,7 @@ else:
     os.environ["OPENAI_API_KEY"] = api_key
     PASS += 1
 
-# ── 5. OpenAI connectivity ────────────────────────────────────────────────────
+# 5. OpenAI connectivity 
 hdr("5. OpenAI API connectivity")
 if api_key and api_key.startswith("sk-"):
     try:
@@ -125,7 +125,7 @@ if api_key and api_key.startswith("sk-"):
 else:
     warn("Skipping OpenAI connectivity test (no valid key)")
 
-# ── 6. PubMed E-utilities ─────────────────────────────────────────────────────
+# 6. PubMed E-utilities 
 hdr("6. PubMed E-utilities connectivity")
 try:
     import requests
@@ -140,7 +140,7 @@ except Exception as e:
     err(f"PubMed unreachable: {e}")
     FAIL += 1
 
-# ── 7. ChromaDB init ──────────────────────────────────────────────────────────
+# 7. ChromaDB init 
 hdr("7. ChromaDB local store")
 try:
     import chromadb
@@ -155,7 +155,7 @@ except Exception as e:
     err(f"ChromaDB init failed: {e}")
     FAIL += 1
 
-# ── 8. Vision agent (mock image) ──────────────────────────────────────────────
+# 8. Vision agent (mock image) 
 hdr("8. VisionAgent (real GPT-4o Vision call)")
 if api_key and api_key.startswith("sk-"):
     try:
@@ -184,7 +184,7 @@ if api_key and api_key.startswith("sk-"):
 else:
     warn("Skipping VisionAgent test (no valid key)")
 
-# ── 9. RetrievalAgent ─────────────────────────────────────────────────────────
+# 9. RetrievalAgent 
 hdr("9. RetrievalAgent (PubMed + ChromaDB)")
 if api_key and api_key.startswith("sk-"):
     try:
@@ -204,7 +204,7 @@ if api_key and api_key.startswith("sk-"):
 else:
     warn("Skipping RetrievalAgent test (no valid key)")
 
-# ── 10. PDF export ────────────────────────────────────────────────────────────
+# 10. PDF export 
 hdr("10. PDF export")
 try:
     from utils.pdf_export import generate_pdf
@@ -227,7 +227,7 @@ except Exception as e:
     err(f"PDF export failed: {e}")
     FAIL += 1
 
-# ── 11. Overlay drawing ───────────────────────────────────────────────────────
+# 11. Overlay drawing 
 hdr("11. Overlay rendering")
 try:
     from PIL import Image
@@ -241,7 +241,7 @@ except Exception as e:
     err(f"Overlay rendering failed: {e}")
     FAIL += 1
 
-# ── Summary ───────────────────────────────────────────────────────────────────
+# Summary 
 print(f"\n{'='*50}")
 total = PASS + FAIL
 print(f"{BOLD}Results: {GREEN}{PASS}/{total} passed{RESET}", end="")

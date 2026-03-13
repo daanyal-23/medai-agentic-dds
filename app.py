@@ -13,12 +13,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ── Session state initialization (must be before any widget) ─────────────────
+# Session state initialization (must be before any widget) 
 for _key in ["image_pil", "result", "traces", "case_data", "rag_seeded"]:
     if _key not in st.session_state:
         st.session_state[_key] = None
 
-# ── Auto-seed RAG index on first boot if ChromaDB is empty ───────────────────
+# Auto-seed RAG index on first boot if ChromaDB is empty 
 if not st.session_state.get("rag_seeded") and os.environ.get("OPENAI_API_KEY"):
     try:
         import chromadb
@@ -52,7 +52,7 @@ if not st.session_state.get("rag_seeded") and os.environ.get("OPENAI_API_KEY"):
     except Exception:
         st.session_state["rag_seeded"] = True  # Don't block app on seed failure
 
-# ── Styles ──────────────────────────────────────────────────────────────────
+# Styles 
 st.markdown("""
 <style>
 .banner {
@@ -87,7 +87,7 @@ st.markdown('<div class="banner">⚠️ RESEARCH & EDUCATION ONLY — NOT A MEDI
 st.title("🏥 MedAI — Agentic Diagnostic Decision Support")
 st.caption("Multi-agent clinical reasoning with imaging analysis and evidence retrieval")
 
-# ── Sidebar: API key ─────────────────────────────────────────────────────────
+# Sidebar: API key 
 with st.sidebar:
     st.header("⚙️ Configuration")
     api_key = st.text_input("OpenAI API Key", type="password",
@@ -111,12 +111,13 @@ with st.sidebar:
     st.markdown("**Agents:** CrewAI pipeline")
     st.markdown("**RAG:** PubMed E-utilities + ChromaDB")
 
-# ── Tabs ─────────────────────────────────────────────────────────────────────
+# Tabs 
 tab_input, tab_results, tab_traces = st.tabs(["📋 Case Input", "🔬 Analysis Results", "🔍 Agent Traces"])
 
-# ════════════════════════════════════════════════════════════════════════════
+
 # TAB 1 — CASE INPUT
-# ════════════════════════════════════════════════════════════════════════════
+
+
 with tab_input:
     col1, col2 = st.columns([1, 1])
 
@@ -227,7 +228,7 @@ with tab_input:
             }
             st.session_state["case_data"] = case_data
 
-            # ── Run the agent pipeline (CrewAI orchestrated) ──────────────────
+            # Run the agent pipeline (CrewAI orchestrated) 
             from agents.crew import run_crew_pipeline
             image_for_pipeline = st.session_state["image_pil"]
 
@@ -265,9 +266,9 @@ with tab_input:
                 import traceback
                 st.code(traceback.format_exc())
 
-# ════════════════════════════════════════════════════════════════════════════
+
 # TAB 2 — RESULTS
-# ════════════════════════════════════════════════════════════════════════════
+
 with tab_results:
     if not st.session_state.get("result"):
         st.info("Run an analysis from the Case Input tab to see results here.")
@@ -277,7 +278,7 @@ with tab_results:
 
         r1, r2 = st.columns([1, 1])
 
-        # ── Left: Image + overlays ────────────────────────────────────────
+        # Left: Image + overlays 
         with r1:
             st.markdown('<h3 class="section-header">🩻 Imaging Analysis</h3>', unsafe_allow_html=True)
             if image and show_overlays:
@@ -307,7 +308,7 @@ with tab_results:
             else:
                 st.info("No structured findings extracted.")
 
-        # ── Right: Differentials ──────────────────────────────────────────
+        # Right: Differentials 
         with r2:
             st.markdown('<h3 class="section-header">🔬 Differential Diagnoses</h3>', unsafe_allow_html=True)
             for i, dx in enumerate(result.get("differentials", []), 1):
@@ -323,7 +324,7 @@ with tab_results:
 
         st.divider()
 
-        # ── Red flags + Next steps ────────────────────────────────────────
+        # Red flags + Next steps 
         rf_col, ns_col = st.columns(2)
         with rf_col:
             st.markdown('<h3 class="section-header">🚨 Red Flags</h3>', unsafe_allow_html=True)
@@ -337,7 +338,7 @@ with tab_results:
 
         st.divider()
 
-        # ── Citations ─────────────────────────────────────────────────────
+        # Citations 
         st.markdown('<h3 class="section-header">📚 Evidence Citations</h3>', unsafe_allow_html=True)
         citations = result.get("citations", [])
         if citations:
@@ -362,19 +363,19 @@ with tab_results:
 
         st.divider()
 
-        # ── Groundedness note ─────────────────────────────────────────────
+        # Groundedness note 
         if result.get("groundedness_note"):
             st.warning(f"📝 **Groundedness Note:** {result['groundedness_note']}")
 
-        # ── Safety disclaimer ─────────────────────────────────────────────
+        # Safety disclaimer 
         st.error(f"🛡️ {result.get('disclaimer','Research/education only. Not for clinical use.')}")
 
-        # ── RAG stats ────────────────────────────────────────────────────
+        # RAG stats 
         if show_rag_stats and result.get("rag_stats"):
             with st.expander("📊 RAG Statistics"):
                 st.json(result["rag_stats"])
 
-        # ── PDF Export ───────────────────────────────────────────────────
+        # PDF Export 
         st.divider()
         from utils.pdf_export import generate_pdf
         # Cache PDF bytes in session state to avoid regenerating on every rerun
@@ -392,9 +393,9 @@ with tab_results:
             key=f"dl_{result.get('case_id','report')}"
         )
 
-# ════════════════════════════════════════════════════════════════════════════
+
 # TAB 3 — AGENT TRACES
-# ════════════════════════════════════════════════════════════════════════════
+
 with tab_traces:
     if not st.session_state.get("traces"):
         st.info("Traces will appear here after running an analysis.")

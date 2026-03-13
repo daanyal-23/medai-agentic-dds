@@ -31,8 +31,7 @@ class SafetyAgent:
                     break
 
         # 2. PHI note — we rely on not collecting PHI rather than text redaction.
-        # Images are displayed only, never stored. No patient identifiers are
-        # accepted in the case form. Banner confirms no PHI stored/transmitted.
+        # Images are displayed only, never stored. No patient identifiers are accepted in the case form. Banner confirms no PHI stored/transmitted.
 
         # 3. Add standard disclaimer
         report["disclaimer"] = DISCLAIMER

@@ -16,7 +16,7 @@ from agents.safety_agent    import SafetyAgent
 
 logger = logging.getLogger(__name__)
 
-# ── Singleton agents — initialized once, reused across requests ──────────────
+# Singleton agents that can be initialized once, reused across requests 
 _vision    = None
 _retrieval = None
 _diagnosis = None
@@ -74,7 +74,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
             "error":         error
         })
 
-    # ── STEP 1: Vision Agent ─────────────────────────────────────────────────
+    # STEP 1: Vision Agent 
     _step(0)
     t = time.time()
     try:
@@ -89,7 +89,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
         trace("VisionAgent", "analyze_cxr", "image", None, None, t, "error", str(e))
         imaging_findings, overlays, vision_report = {}, [], f"Vision error: {e}"
 
-    # ── STEP 2: Retrieval Agent ──────────────────────────────────────────────
+    # STEP 2: Retrieval Agent 
     _step(1)
     t = time.time()
     query = _build_retrieval_query(case_data, imaging_findings)
@@ -109,7 +109,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
         trace("RetrievalAgent", "hybrid_search", query, None, None, t, "error", str(e))
         snippets, rag_stats = [], {}
 
-    # ── STEP 3: Diagnosis Agent ──────────────────────────────────────────────
+    # STEP 3: Diagnosis Agent 
     _step(2)
     t = time.time()
     try:
@@ -129,7 +129,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
         trace("DiagnosisAgent", "generate_report", "", None, None, t, "error", str(e))
         report = {"differentials": [], "red_flags": [], "next_steps": [], "citations": []}
 
-    # ── STEP 4: Citation Verifier ────────────────────────────────────────────
+    # STEP 4: Citation Verifier 
     _step(3)
     t = time.time()
     try:
@@ -142,7 +142,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
         trace("CitationVerifierAgent", "verify_citations", "", None, None, t, "error", str(e))
         groundedness_note = "Verification skipped due to error."
 
-    # ── STEP 5: Safety Agent ─────────────────────────────────────────────────
+    # STEP 5: Safety Agent 
     _step(4)
     t = time.time()
     try:
@@ -155,7 +155,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
         trace("SafetyAgent", "compliance_check", "", None, None, t, "error", str(e))
         report["disclaimer"] = "Research/education only. Not for clinical use."
 
-    # ── Orchestrator trace (prepended) ───────────────────────────────────────
+    # Orchestrator trace (prepended) 
     ctx = case_data.get("patient_context", {})
     total_ms = sum(tr.get("duration_ms", 0) for tr in traces)
     traces.insert(0, {
@@ -171,7 +171,7 @@ def run_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple
         "error":          ""
     })
 
-    # ── Persist traces to sample_data/traces/ ───────────────────────────────
+    # Persist traces to sample_data/traces/ 
     traces_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "sample_data", "traces")
     os.makedirs(traces_dir, exist_ok=True)
     with open(os.path.join(traces_dir, "run.jsonl"), "a") as f:

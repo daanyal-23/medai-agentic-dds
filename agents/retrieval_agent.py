@@ -33,7 +33,7 @@ class RetrievalAgent:
             metadata={"hnsw:space": "cosine"}
         )
 
-    # ── PubMed E-utilities ───────────────────────────────────────────────────
+    # PubMed E-utilities 
     def _pubmed_search(self, query: str, max_results: int, recency_years: int) -> list[dict]:
         from datetime import datetime
         mindate = datetime.now().year - recency_years
@@ -98,7 +98,7 @@ class RetrievalAgent:
             print(f"XML parse error: {e}")
         return docs
 
-    # ── ChromaDB upsert ──────────────────────────────────────────────────────
+    # ChromaDB upsert 
     def _upsert_docs(self, docs: list[dict]):
         if not docs:
             return
@@ -113,7 +113,7 @@ class RetrievalAgent:
         for i in range(0, len(ids), 50):
             self.collection.upsert(ids=ids[i:i+50], documents=texts[i:i+50], metadatas=metas[i:i+50])
 
-    # ── Hybrid retrieval ─────────────────────────────────────────────────────
+    # Hybrid retrieval 
     def retrieve(self, query: str, max_results: int = 8, recency_years: int = 5) -> tuple[list, dict]:
         t0 = time.time()
 

@@ -16,7 +16,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-# ── Shared state passed between tasks via context ────────────────────────────
+# Shared state passed between tasks via context 
 class PipelineContext:
     """Mutable context passed through the CrewAI pipeline."""
     def __init__(self, case_data: dict, image_pil: Image.Image):
@@ -34,9 +34,7 @@ class PipelineContext:
 _ctx: PipelineContext = None
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# TOOLS — each wraps one of our existing agent classes
-# ══════════════════════════════════════════════════════════════════════════════
+# TOOLS — each wraps to one of the existing agent classes
 
 class VisionAnalysisTool(BaseTool):
     name: str = "vision_analysis"
@@ -179,16 +177,15 @@ class SafetyComplianceTool(BaseTool):
             return json.dumps({"error": str(e), "status": "failed"})
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # CREWAI AGENTS
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 def build_crew() -> Crew:
     """Build and return the MedAI CrewAI crew."""
 
     llm_model = "gpt-4o"
 
-    # ── Agent definitions ────────────────────────────────────────────────────
+    # Agent definitions 
 
     orchestrator = Agent(
         role="Medical AI Orchestrator",
@@ -292,7 +289,7 @@ def build_crew() -> Crew:
         llm=llm_model
     )
 
-    # ── Task definitions ─────────────────────────────────────────────────────
+    # Task definitions 
 
     task_vision = Task(
         description=(
@@ -362,7 +359,7 @@ def build_crew() -> Crew:
         context=[task_verification]
     )
 
-    # ── Assemble crew ────────────────────────────────────────────────────────
+    # Assemble crew 
     crew = Crew(
         agents=[orchestrator, vision_agent, retrieval_agent, diagnosis_agent, verifier_agent, safety_agent],
         tasks=[task_vision, task_retrieval, task_diagnosis, task_verification, task_safety],
@@ -373,9 +370,8 @@ def build_crew() -> Crew:
     return crew
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # MAIN ENTRY POINT
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 def run_crew_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> tuple[dict, list]:
     """
@@ -387,7 +383,7 @@ def run_crew_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> 
 
     global _ctx
 
-    # ── Warm up singleton agents before CrewAI starts ────────────────────────
+    # Warm up singleton agents before CrewAI starts 
     # This prevents cold-start race conditions on first run after reinitialization.
     from agents.vision_agent    import VisionAgent
     from agents.retrieval_agent import RetrievalAgent
@@ -418,7 +414,7 @@ def run_crew_pipeline(case_data: dict, image_pil: Image.Image, on_step=None) -> 
             crew_output = crew.kickoff()
             _step(2); _step(3); _step(4)
 
-            # Check if result is empty — retry if so
+            # Check if result is empty and retry if so
             if not _ctx.report.get("differentials") and attempt < MAX_ATTEMPTS - 1:
                 logger.warning(f"CrewAI returned empty report on attempt {attempt+1}. Retrying...")
                 time.sleep(2)
