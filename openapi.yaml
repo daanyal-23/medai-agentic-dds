@@ -1,0 +1,206 @@
+openapi: "3.1.0"
+info:
+  title: MedAI — Agentic Diagnostic Decision Support
+  version: "0.1.0"
+  description: |
+    Multi-agent clinical reasoning with chest X-ray analysis, PubMed evidence
+    retrieval, and grounded differential diagnosis.
+
+    **⚠️ RESEARCH & EDUCATION ONLY — NOT A MEDICAL DEVICE — NOT FOR CLINICAL USE.**
+  contact:
+    name: MedAI Research
+    email: medai@example.com
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+  - url: https://your-deployment-url.com
+    description: Production
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags: [Health]
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+
+  /analyze-case:
+    post:
+      summary: Analyze chest X-ray + clinical vignette
+      tags: [Analysis]
+      description: |
+        Runs the full multi-agent pipeline:
+        1. VisionAgent (GPT-4o Vision) → structured imaging findings + overlays
+        2. RetrievalAgent (PubMed E-utilities + ChromaDB + BM25) → evidence snippets
+        3. DiagnosisAgent (GPT-4o) → differentials, ICD-10, red flags, next steps
+        4. CitationVerifierAgent → groundedness check
+        5. SafetyAgent → PHI/dosing guardrails + disclaimer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyzeCaseRequest"
+            example:
+              case_id: "abc-123"
+              patient_context:
+                age: 64
+                sex: Male
+                chief_complaint: Acute dyspnea
+                vitals:
+                  BP: "98/60"
+                  HR: 120
+                  RR: 28
+                  SpO2: 88
+                labs:
+                  D_dimer: 1200
+                  troponin: 0.03
+                meds: ["metformin"]
+              image_b64: "<base64-encoded PNG>"
+              preferences:
+                recency_years: 5
+                max_citations: 8
+      responses:
+        "200":
+          description: Successful analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyzeCaseResponse"
+        "400":
+          description: Invalid request (bad image, missing fields)
+        "500":
+          description: Pipeline error
+
+components:
+  schemas:
+    Vitals:
+      type: object
+      properties:
+        BP:   { type: string,  example: "98/60" }
+        HR:   { type: integer, example: 120 }
+        RR:   { type: integer, example: 28 }
+        SpO2: { type: integer, example: 88 }
+        Temp: { type: number,  example: 37.1 }
+
+    Labs:
+      type: object
+      properties:
+        D_dimer:  { type: number, example: 1200 }
+        troponin: { type: number, example: 0.03 }
+        WBC:      { type: number, example: 9.2 }
+        CRP:      { type: number, example: 12.0 }
+
+    PatientContext:
+      type: object
+      required: [age, sex, chief_complaint]
+      properties:
+        age:             { type: integer, example: 64 }
+        sex:             { type: string,  example: Male }
+        chief_complaint: { type: string,  example: Acute dyspnea }
+        hpi:             { type: string }
+        vitals:          { $ref: "#/components/schemas/Vitals" }
+        labs:            { $ref: "#/components/schemas/Labs" }
+        meds:            { type: array, items: { type: string } }
+        allergies:       { type: string }
+        pmh:             { type: string }
+
+    AnalysisPreferences:
+      type: object
+      properties:
+        recency_years: { type: integer, default: 5 }
+        max_citations: { type: integer, default: 8 }
+
+    AnalyzeCaseRequest:
+      type: object
+      required: [case_id, patient_context, image_b64]
+      properties:
+        case_id:         { type: string }
+        patient_context: { $ref: "#/components/schemas/PatientContext" }
+        image_b64:       { type: string, description: Base64-encoded PNG/JPEG }
+        preferences:     { $ref: "#/components/schemas/AnalysisPreferences" }
+
+    ImagingFinding:
+      type: object
+      properties:
+        prob:        { type: number, example: 0.91 }
+        laterality:  { type: string, example: right }
+        size:        { type: string, example: small }
+        description: { type: string }
+
+    Differential:
+      type: object
+      properties:
+        dx:        { type: string, example: Right pneumothorax }
+        icd10:     { type: string, example: J93.9 }
+        rationale: { type: string }
+        support:
+          type: array
+          items:
+            type: object
+            properties:
+              snippet_id: { type: string }
+
+    Citation:
+      type: object
+      properties:
+        id:         { type: string, example: s1 }
+        pmid:       { type: string, example: "12345678" }
+        doi:        { type: string, example: "10.1056/NEJMoa..." }
+        title:      { type: string }
+        year:       { type: string, example: "2022" }
+        study_type: { type: string, example: Guideline }
+        quote:      { type: string, description: Verbatim sentence from source }
+
+    Overlay:
+      type: object
+      properties:
+        overlay_id: { type: string, example: ovl_001 }
+        type:       { type: string, example: bbox }
+        coords:
+          type: array
+          items: { type: number }
+          description: "[x_frac, y_frac, w_frac, h_frac] as fractions of image dimensions"
+        label: { type: string }
+
+    AnalyzeCaseResponse:
+      type: object
+      properties:
+        case_id:
+          type: string
+        imaging_findings:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ImagingFinding"
+        differentials:
+          type: array
+          items: { $ref: "#/components/schemas/Differential" }
+        red_flags:
+          type: array
+          items: { type: string }
+        next_steps:
+          type: array
+          items: { type: string }
+        citations:
+          type: array
+          items: { $ref: "#/components/schemas/Citation" }
+        overlays:
+          type: array
+          items: { $ref: "#/components/schemas/Overlay" }
+        groundedness_note:
+          type: string
+        disclaimer:
+          type: string
+          example: "RESEARCH & EDUCATION ONLY. Not for clinical use."

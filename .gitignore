@@ -1,0 +1,12 @@
+.dist
+.env
+*.pyc
+__pycache__/
+rag/chroma_store/
+.streamlit/secrets.toml
+*.dcm
+*.nii
+.DS_Store
+venv/
+.venv/
+sample_data/traces/run.jsonl
